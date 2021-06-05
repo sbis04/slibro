@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/infrastructure/authentication.dart';
+import 'package:slibro/presentation/screens/welcome_screen.dart';
 import 'package:slibro/presentation/widgets/splash_screen/google_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -41,7 +44,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-            GoogleButton(),
+            FutureBuilder<User?>(
+                future: Authentication.initializeFirebase(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    User? currentUser = snapshot.data;
+
+                    if (currentUser != null) {
+                      WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => WelcomeScreen(),
+                          ),
+                        );
+                      });
+
+                      return Container();
+                    } else {
+                      return GoogleButton();
+                    }
+                  }
+                  return CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Palette.greyDark,
+                    ),
+                  );
+                }),
             SizedBox(height: 32.0)
           ],
         ),
