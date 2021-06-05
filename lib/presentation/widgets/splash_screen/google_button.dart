@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/infrastructure/authentication.dart';
+import 'package:slibro/presentation/screens/welcome_screen.dart';
 
 class GoogleButton extends StatefulWidget {
   @override
@@ -25,8 +28,28 @@ class _GoogleButtonState extends State<GoogleButton> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 ),
+                side: BorderSide(
+                  color: Palette.black,
+                  width: 1,
+                ),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                setState(() {
+                  _isSigningIn = true;
+                });
+
+                User? user = await Authentication.signInWithGoogle();
+
+                setState(() {
+                  _isSigningIn = false;
+                });
+
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => WelcomeScreen(),
+                  ),
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
