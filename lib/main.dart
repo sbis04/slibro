@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/presentation/screens/login_screen.dart';
 
 import 'application/res/strings.dart';
 import 'presentation/screens/splash_screen.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w600),
         ),
       ),
-      home: SplashScreen(),
+      home: LoginScreen(),
     );
   }
 }
