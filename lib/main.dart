@@ -3,7 +3,6 @@ import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/presentation/screens/login_screen.dart';
 
 import 'application/res/strings.dart';
-import 'presentation/screens/splash_screen.dart';
 
 void main() {
   runApp(MyApp());
