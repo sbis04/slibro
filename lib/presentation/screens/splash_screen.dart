@@ -32,7 +32,6 @@ class SplashScreen extends StatelessWidget {
                     'Slibro',
                     style: Theme.of(context).textTheme.headline1,
                   ),
-                  // GoogleButton(),
                 ],
               ),
             ),
