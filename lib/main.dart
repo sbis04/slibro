@@ -42,6 +42,17 @@ class MyApp extends StatelessWidget {
             letterSpacing: 1,
           ),
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: Palette.blackLight,
+            padding: EdgeInsets.all(14.0),
+            textStyle: TextStyle(
+              color: Palette.white,
+              fontSize: 24.0,
+              fontFamily: 'Poppins',
+            ),
+          ),
+        ),
       ),
       home: LoginScreen(),
     );
