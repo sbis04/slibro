@@ -16,13 +16,31 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'PierSans',
+        fontFamily: 'Poppins',
         textTheme: TextTheme(
           headline1: TextStyle(
-              color: Palette.black,
-              fontSize: 32.0,
-              letterSpacing: 1,
-              fontWeight: FontWeight.w600),
+            color: Palette.black,
+            fontSize: 32.0,
+            letterSpacing: 1,
+            fontWeight: FontWeight.w600,
+          ),
+          headline2: TextStyle(
+            color: Palette.black,
+            fontSize: 32.0,
+            letterSpacing: 1,
+            fontWeight: FontWeight.w600,
+          ),
+          bodyText1: TextStyle(
+            color: Palette.black,
+            fontSize: 16.0,
+            // letterSpacing: 1,
+            fontWeight: FontWeight.w400,
+          ),
+          bodyText2: TextStyle(
+            color: Palette.blackLight,
+            fontSize: 14.0,
+            letterSpacing: 1,
+          ),
         ),
       ),
       home: LoginScreen(),
