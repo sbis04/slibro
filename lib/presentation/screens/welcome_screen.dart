@@ -39,79 +39,77 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       child: Scaffold(
         backgroundColor: Palette.white,
         body: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hello',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(color: Palette.greyDark.withOpacity(0.8)),
-                  ),
-                  TextField(
-                    controller: _nameController,
-                    focusNode: _nameFocus,
-                    textCapitalization: TextCapitalization.words,
-                    style: Theme.of(context).textTheme.headline1,
-                    cursorColor: Palette.greyLight,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(width: 5),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hello',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline1!
+                            .copyWith(color: Palette.greyDark.withOpacity(0.8)),
                       ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: Palette.greyLight,
+                      TextField(
+                        controller: _nameController,
+                        focusNode: _nameFocus,
+                        textCapitalization: TextCapitalization.words,
+                        style: Theme.of(context).textTheme.headline1,
+                        cursorColor: Palette.greyLight,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 5),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: Palette.greyLight,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: Palette.greyMedium,
+                            ),
+                          ),
+                          hintText: 'Enter your name',
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .bodyText2!
+                              .copyWith(color: Palette.greyLight),
                         ),
+                        onChanged: (value) {
+                          if (value == '') {
+                            setState(() {});
+                          } else if (value.length == 1) {
+                            setState(() {});
+                          }
+                        },
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: Palette.greyMedium,
-                        ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'You can edit your name above',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Palette.greyMedium),
                       ),
-                      hintText: 'Enter your name',
-                      hintStyle: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(color: Palette.greyLight),
-                    ),
+                    ],
                   ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    'You can edit your name above',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Palette.greyMedium),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                    onPressed: _nameController.text.isEmpty ? null : () {},
+                    child: Text('Continue'),
                   ),
-                  // SizedBox(height: 16.0),
-                  // RichText(
-                  //   text: TextSpan(
-                  //     style: Theme.of(context).textTheme.bodyText2,
-                  //     children: [
-                  //       TextSpan(
-                  //         text: 'Storel ',
-                  //         style:
-                  //             Theme.of(context).textTheme.bodyText2!.copyWith(
-                  //                   fontWeight: FontWeight.w600,
-                  //                   letterSpacing: 1,
-                  //                 ),
-                  //       ),
-                  //       TextSpan(
-                  //         text:
-                  //             'is a platform for authors, publishers & readers',
-                  //       ),
-                  //     ],
-                  //   ),
-                  // )
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
