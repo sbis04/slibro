@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -41,7 +40,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -66,16 +64,39 @@ flutter:
   fonts:
     - family: PierSans
       fonts:
-        - asset: fonts/PierSans-Light.otf
+        - asset: fonts/pier-sans/PierSans-Light.otf
           weight: 400
-        - asset: fonts/PierSans-Regular.otf
+        - asset: fonts/pier-sans/PierSans-Regular.otf
           weight: 500
-        - asset: fonts/PierSans-Medium.otf
+        - asset: fonts/pier-sans/PierSans-Medium.otf
           weight: 600
-        - asset: fonts/PierSans-Bold.otf
+        - asset: fonts/pier-sans/PierSans-Bold.otf
           weight: 700
-        - asset: fonts/PierSans-Black.otf
+        - asset: fonts/pier-sans/PierSans-Black.otf
           weight: 800
+
+    - family: Poppins
+      fonts:
+        - asset: fonts/poppins/Poppins-ExtraLight.ttf
+          weight: 300
+
+        - asset: fonts/poppins/Poppins-Light.ttf
+          weight: 400
+        - asset: fonts/poppins/Poppins-Regular.ttf
+          weight: 500
+        - asset: fonts/poppins/Poppins-Medium.ttf
+          weight: 600
+        - asset: fonts/poppins/Poppins-Bold.ttf
+          weight: 700
+        - asset: fonts/poppins/Poppins-SemiBold.ttf
+          weight: 800
+        - asset: fonts/poppins/Poppins-ExtraBold.ttf
+          weight: 900
+
+    - family: Baskervville
+      fonts:
+        - asset: fonts/baskervville/Baskervville-Regular.ttf
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
