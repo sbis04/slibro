@@ -54,7 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       WidgetsBinding.instance!.addPostFrameCallback((_) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => WelcomeScreen(),
+                            builder: (context) => WelcomeScreen(
+                              user: currentUser,
+                            ),
                           ),
                         );
                       });

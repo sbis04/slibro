@@ -44,11 +44,15 @@ class _GoogleButtonState extends State<GoogleButton> {
                   _isSigningIn = false;
                 });
 
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => WelcomeScreen(),
-                  ),
-                );
+                if (user != null) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => WelcomeScreen(
+                        user: user,
+                      ),
+                    ),
+                  );
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
