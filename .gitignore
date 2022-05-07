@@ -48,3 +48,5 @@ app.*.map.json
 # Firebase secrets
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
+lib/secrets.dart
+.vscode/settings.json
