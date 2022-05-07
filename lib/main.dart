@@ -1,14 +1,25 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/presentation/screens/login_screen.dart';
+import 'package:slibro/secrets.dart';
 
 import 'application/res/strings.dart';
 
+Client client = Client();
+
 void main() {
   runApp(MyApp());
+
+  client
+      .setEndpoint(Secrets.hostname)
+      .setProject(Secrets.projectID)
+      .setSelfSigned(status: true);
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'Poppins',
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           headline1: TextStyle(
             color: Palette.black,
             fontSize: 32.0,
@@ -45,16 +56,22 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             primary: Palette.blackLight,
-            padding: EdgeInsets.all(14.0),
-            textStyle: TextStyle(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 14.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            textStyle: const TextStyle(
               color: Palette.white,
-              fontSize: 24.0,
+              fontSize: 20.0,
               fontFamily: 'Poppins',
             ),
           ),
         ),
       ),
-      home: LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }
