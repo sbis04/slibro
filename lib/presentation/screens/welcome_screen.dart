@@ -1,14 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:slibro/application/res/palette.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  final User user;
+  // final User user;
 
   const WelcomeScreen({
     Key? key,
-    required this.user,
+    // required this.user,
   }) : super(key: key);
 
   @override
@@ -18,13 +18,14 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   late final TextEditingController _nameController;
   late final FocusNode _nameFocus;
-  late final User _currentUser;
+  // late final User _currentUser;
 
   @override
   void initState() {
-    _currentUser = widget.user;
+    // _currentUser = widget.user;
 
-    _nameController = TextEditingController(text: _currentUser.displayName);
+    // _nameController = TextEditingController(text: _currentUser.displayName);
+    _nameController = TextEditingController();
     _nameFocus = FocusNode();
 
     super.initState();
