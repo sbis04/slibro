@@ -32,15 +32,15 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           headline1: TextStyle(
             color: Palette.black,
-            fontSize: 32.0,
+            fontSize: 50.0,
             letterSpacing: 1,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
           ),
           headline2: TextStyle(
             color: Palette.black,
             fontSize: 32.0,
             letterSpacing: 1,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
           ),
           bodyText1: TextStyle(
             color: Palette.black,

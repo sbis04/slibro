@@ -1,7 +1,11 @@
 import 'dart:developer';
 
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/main.dart';
+import 'package:slibro/presentation/screens/greet_screen.dart';
 import 'package:slibro/presentation/screens/register_screen.dart';
 import 'package:slibro/utils/validators.dart';
 
@@ -157,11 +161,34 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                // SignInButton(
-                //   loginFormKey: _loginFormKey,
-                //   email: _emailTextController.text,
-                //   password: _passwordTextController.text,
-                // ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      // TODO: Comment this out
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => GreetScreen(),
+                        ),
+                      );
+                      // if (_loginFormKey.currentState!.validate()) {
+                      //   Account account = Account(client);
+                      //   Session userSession = await account
+                      //       .createSession(
+                      //     email: _emailTextController.text,
+                      //     password: _passwordTextController.text,
+                      //   )
+                      //       .catchError((error) {
+                      //     log(error.response);
+                      //   });
+
+                      //   log('User logged in successfully: ${userSession.userId}');
+                      // }
+                    },
+                    child: const Text('Sign In'),
+                  ),
+                ),
               ],
             ),
           ),

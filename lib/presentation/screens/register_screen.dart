@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/main.dart';
 import 'package:slibro/presentation/screens/login_screen.dart';
 import 'package:slibro/presentation/screens/splash_screen.dart';
 import 'package:slibro/utils/validators.dart';
@@ -245,7 +248,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_registerFormKey.currentState!.validate()) {
+                        Account account = Account(client);
+                        User newUser = await account
+                            .create(
+                          userId: 'unique()',
+                          email: _emailTextController.text,
+                          password: _passwordTextController.text,
+                          name: _userNameTextController.text,
+                        )
+                            .catchError((error) {
+                          log(error.response.toString());
+                        });
+
+                        log('User account created successfully: ${newUser.$id}');
+                      }
+                    },
+                    child: const Text('Sign Up'),
+                  ),
+                ),
               ],
             ),
           ),

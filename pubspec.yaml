@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   appwrite: ^4.0.2
+  flutter_quill: ^4.1.3
 
 dev_dependencies:
   flutter_test:
