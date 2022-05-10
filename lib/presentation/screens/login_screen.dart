@@ -166,25 +166,30 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.maxFinite,
                   child: ElevatedButton(
                     onPressed: () async {
-                      // TODO: Comment this out
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => GreetScreen(),
-                        ),
-                      );
-                      // if (_loginFormKey.currentState!.validate()) {
-                      //   Account account = Account(client);
-                      //   Session userSession = await account
-                      //       .createSession(
-                      //     email: _emailTextController.text,
-                      //     password: _passwordTextController.text,
-                      //   )
-                      //       .catchError((error) {
-                      //     log(error.response);
-                      //   });
+                      _emailFocusNode.unfocus();
+                      _passwordFocusNode.unfocus();
 
-                      //   log('User logged in successfully: ${userSession.userId}');
-                      // }
+                      if (_loginFormKey.currentState!.validate()) {
+                        Account account = Account(client);
+                        Session userSession = await account
+                            .createSession(
+                                email: _emailTextController.text,
+                                password: _passwordTextController.text)
+                            .catchError((error) {
+                          log(error.response);
+                        });
+                        User loggedInUser = await account.get();
+
+                        log('User logged in successfully: ${userSession.userId}');
+
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => GreetScreen(
+                              user: loggedInUser,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     child: const Text('Sign In'),
                   ),
