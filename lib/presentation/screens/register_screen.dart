@@ -5,6 +5,7 @@ import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/main.dart';
+import 'package:slibro/presentation/screens/greet_screen.dart';
 import 'package:slibro/presentation/screens/login_screen.dart';
 import 'package:slibro/presentation/screens/splash_screen.dart';
 import 'package:slibro/utils/validators.dart';
@@ -253,6 +254,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: double.maxFinite,
                   child: ElevatedButton(
                     onPressed: () async {
+                      _userNameFocusNode.unfocus();
+                      _emailFocusNode.unfocus();
+                      _passwordFocusNode.unfocus();
+                      _confirmPasswordFocusNode.unfocus();
                       if (_registerFormKey.currentState!.validate()) {
                         Account account = Account(client);
                         User newUser = await account
@@ -267,6 +272,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
 
                         log('User account created successfully: ${newUser.$id}');
+
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => GreetScreen(
+                              user: newUser,
+                            ),
+                          ),
+                        );
                       }
                     },
                     child: const Text('Sign Up'),
