@@ -1,9 +1,15 @@
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:slibro/application/res/palette.dart';
 
 class WritingScreen extends StatefulWidget {
-  const WritingScreen({Key? key}) : super(key: key);
+  const WritingScreen({
+    Key? key,
+    required this.story,
+  }) : super(key: key);
+
+  final Document story;
 
   @override
   State<WritingScreen> createState() => _WritingScreenState();
