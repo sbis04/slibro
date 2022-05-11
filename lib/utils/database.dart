@@ -24,7 +24,7 @@ class DatabaseClient {
     final Document newStory = await database
         .createDocument(
       collectionId: storiesCollectionId,
-      documentId: user.$id,
+      documentId: 'unique()',
       data: data,
     )
         .catchError((e) {
@@ -57,5 +57,28 @@ class DatabaseClient {
     return storyData.data;
   }
 
-  updateStory() {}
+  Future<Document?> addStoryFile({
+    required String documentID,
+    required String fileID,
+  }) async {
+    final Document story = await database.getDocument(
+      collectionId: storiesCollectionId,
+      documentId: documentID,
+    );
+
+    final List<String> contents = List<String>.from(story.data['contents']);
+
+    if (contents.contains(fileID)) return null;
+
+    contents.add(fileID);
+    final Document updatedStory = await database.updateDocument(
+      collectionId: storiesCollectionId,
+      documentId: documentID,
+      data: {'contents': contents},
+    );
+
+    log('Updated document successfully, ID: ${updatedStory.$id}');
+
+    return updatedStory;
+  }
 }
