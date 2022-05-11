@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   appwrite: ^4.0.2
   flutter_quill: ^4.1.3
+  path_provider: ^2.0.9
+  shared_preferences: ^2.0.14
 
 dev_dependencies:
   flutter_test:
