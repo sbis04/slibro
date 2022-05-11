@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late final TextEditingController _passwordTextController;
   late final FocusNode _emailFocusNode;
   late final FocusNode _passwordFocusNode;
+  bool _isAuthenticating = false;
 
   @override
   void initState() {
@@ -170,6 +171,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       _passwordFocusNode.unfocus();
 
                       if (_loginFormKey.currentState!.validate()) {
+                        setState(() {
+                          _isAuthenticating = true;
+                        });
                         Account account = Account(client);
                         Session userSession = await account
                             .createSession(
@@ -189,9 +193,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         );
+                        setState(() {
+                          _isAuthenticating = false;
+                        });
                       }
                     },
-                    child: const Text('Sign In'),
+                    child: _isAuthenticating
+                        ? const SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Palette.greyDark,
+                              ),
+                            ),
+                          )
+                        : const Text('Sign In'),
                   ),
                 ),
               ],
