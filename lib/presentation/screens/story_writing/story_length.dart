@@ -1,9 +1,15 @@
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/presentation/screens/story_writing/story_name.dart';
 
 class StoryLengthScreen extends StatelessWidget {
-  const StoryLengthScreen({Key? key}) : super(key: key);
+  const StoryLengthScreen({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,10 @@ class StoryLengthScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const StoryNameScreen(),
+                        builder: (context) => StoryNameScreen(
+                          isShort: true,
+                          user: user,
+                        ),
                       ),
                     );
                   },
@@ -63,7 +72,10 @@ class StoryLengthScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const StoryNameScreen(),
+                        builder: (context) => StoryNameScreen(
+                          user: user,
+                          isShort: false,
+                        ),
                       ),
                     );
                   },
