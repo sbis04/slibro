@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slibro/application/res/appwrite_const.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/main.dart';
 import 'package:slibro/presentation/screens/greet_screen.dart';
@@ -29,6 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late final FocusNode _emailFocusNode;
   late final FocusNode _passwordFocusNode;
   late final FocusNode _confirmPasswordFocusNode;
+
+  bool _isAuthenticating = false;
 
   @override
   void initState() {
@@ -259,6 +263,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _passwordFocusNode.unfocus();
                       _confirmPasswordFocusNode.unfocus();
                       if (_registerFormKey.currentState!.validate()) {
+                        setState(() {
+                          _isAuthenticating = true;
+                        });
+
                         Account account = Account(client);
                         User newUser = await account
                             .create(
@@ -273,6 +281,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         log('User account created successfully: ${newUser.$id}');
 
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString(
+                          authEmailSharedPrefKey,
+                          _emailTextController.text,
+                        );
+                        await prefs.setString(
+                          authPasswordSharedPrefKey,
+                          _passwordTextController.text,
+                        );
+
+                        setState(() {
+                          _isAuthenticating = false;
+                        });
+
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => GreetScreen(
@@ -282,7 +304,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         );
                       }
                     },
-                    child: const Text('Sign Up'),
+                    child: _isAuthenticating
+                        ? const SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Palette.greyDark,
+                              ),
+                            ),
+                          )
+                        : const Text('Sign Up'),
                   ),
                 ),
               ],
