@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slibro/application/res/appwrite_const.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/main.dart';
+import 'package:slibro/presentation/screens/dashboard_page.dart';
 import 'package:slibro/presentation/screens/login_screen.dart';
+import 'package:slibro/presentation/screens/story_writing/story_length.dart';
 
 import 'greet_screen.dart';
 
@@ -42,10 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
       User loggedInUser = await account.get();
 
-      // TODO: Navigate to the dashboard
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => GreetScreen(
+          builder: (context) => DashboardPage(
             user: loggedInUser,
           ),
         ),
@@ -59,19 +60,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    getLoggedInUserId();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
     );
+    getLoggedInUserId();
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.white,
       body: SafeArea(

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
@@ -30,5 +32,20 @@ class StorageClient {
     log('File successfully stored, ID: ${file.$id}');
 
     return file;
+  }
+
+  Future<String> getJSONFile({required String fileID}) async {
+    Uint8List rawFile = await storage
+        .getFileDownload(
+      bucketId: filesBucketId,
+      fileId: fileID,
+    )
+        .catchError((e) {
+      log('Error retrieving file: ${e.toString()}');
+    });
+
+    final jsonString = utf8.decode(rawFile);
+
+    return jsonString;
   }
 }

@@ -5,16 +5,19 @@ import 'package:slibro/presentation/screens/story_writing/chapter_description.da
 import 'package:slibro/presentation/screens/story_writing/writing_view.dart';
 import 'package:slibro/utils/database.dart';
 import 'package:slibro/utils/validators.dart';
+import 'package:tuple/tuple.dart';
 
 class StoryNameScreen extends StatefulWidget {
   const StoryNameScreen({
     Key? key,
     required this.isShort,
     required this.user,
+    this.isInitial = false,
   }) : super(key: key);
 
   final bool isShort;
   final User user;
+  final bool isInitial;
 
   @override
   State<StoryNameScreen> createState() => _StoryNameScreenState();
@@ -71,7 +74,7 @@ class _StoryNameScreenState extends State<StoryNameScreen> {
                       color: Palette.black,
                     ),
                     textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.name,
                     cursorColor: Palette.greyMedium,
                     decoration: InputDecoration(
                       border: const UnderlineInputBorder(),
@@ -124,18 +127,38 @@ class _StoryNameScreenState extends State<StoryNameScreen> {
                           );
 
                           if (widget.isShort) {
+                            Tuple2<Document, Document> storyAndChapter =
+                                await _databaseClient.createChapter(
+                              documentID: newStory.$id,
+                              number: 1,
+                              name: 'default',
+                              description: 'story',
+                            );
+
+                            final retrievedStory = storyAndChapter.item1;
+                            final retrievedChapter = storyAndChapter.item2;
+
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (context) => WritingScreen(
-                                  story: newStory,
+                                  story: retrievedStory,
+                                  chapter: retrievedChapter,
+                                  isShort: widget.isShort,
+                                  user: widget.user,
+                                  isInitial: widget.isInitial,
                                 ),
                               ),
                             );
                           } else {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const ChapterDescriptionScreen(),
+                                builder: (context) => ChapterDescriptionScreen(
+                                  story: newStory,
+                                  chapterNumber: 1,
+                                  isShort: widget.isShort,
+                                  user: widget.user,
+                                  isInitial: widget.isInitial,
+                                ),
                               ),
                             );
                           }

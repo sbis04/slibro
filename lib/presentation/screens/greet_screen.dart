@@ -69,6 +69,7 @@ class GreetScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => StoryLengthScreen(
                           user: user,
+                          isInitial: true,
                         ),
                       ),
                     );

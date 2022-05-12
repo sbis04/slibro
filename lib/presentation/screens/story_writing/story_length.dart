@@ -7,9 +7,11 @@ class StoryLengthScreen extends StatelessWidget {
   const StoryLengthScreen({
     Key? key,
     required this.user,
+    this.isInitial = false,
   }) : super(key: key);
 
   final User user;
+  final bool isInitial;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class StoryLengthScreen extends StatelessWidget {
                         builder: (context) => StoryNameScreen(
                           isShort: true,
                           user: user,
+                          isInitial: isInitial,
                         ),
                       ),
                     );
@@ -75,6 +78,7 @@ class StoryLengthScreen extends StatelessWidget {
                         builder: (context) => StoryNameScreen(
                           user: user,
                           isShort: false,
+                          isInitial: isInitial,
                         ),
                       ),
                     );

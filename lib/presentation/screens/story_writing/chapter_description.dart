@@ -1,12 +1,28 @@
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/presentation/screens/story_writing/chapter_view.dart';
 import 'package:slibro/presentation/screens/story_writing/writing_view.dart';
+import 'package:slibro/utils/database.dart';
 import 'package:slibro/utils/validators.dart';
+import 'package:tuple/tuple.dart';
 
 class ChapterDescriptionScreen extends StatefulWidget {
-  const ChapterDescriptionScreen({Key? key}) : super(key: key);
+  const ChapterDescriptionScreen({
+    Key? key,
+    required this.story,
+    required this.isShort,
+    required this.chapterNumber,
+    required this.user,
+    this.isInitial = false,
+  }) : super(key: key);
+
+  final Document story;
+  final bool isShort;
+  final int chapterNumber;
+  final User user;
+  final bool isInitial;
 
   @override
   State<ChapterDescriptionScreen> createState() =>
@@ -20,6 +36,9 @@ class _ChapterDescriptionScreenState extends State<ChapterDescriptionScreen> {
   late final TextEditingController _descriptionTextController;
   late final FocusNode _nameFocusNode;
   late final FocusNode _descriptionFocusNode;
+  final DatabaseClient _databaseClient = DatabaseClient();
+
+  bool isStoring = false;
 
   @override
   void initState() {
@@ -60,6 +79,15 @@ class _ChapterDescriptionScreenState extends State<ChapterDescriptionScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 80),
+                    Text(
+                      'CHAPTER ${widget.chapterNumber}',
+                      style: const TextStyle(
+                        color: Palette.greyDark,
+                        fontSize: 12,
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                     TextFormField(
                       controller: _nameTextController,
                       focusNode: _nameFocusNode,
@@ -68,7 +96,7 @@ class _ChapterDescriptionScreenState extends State<ChapterDescriptionScreen> {
                         color: Palette.black,
                       ),
                       textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.name,
                       cursorColor: Palette.greyMedium,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(),
@@ -105,7 +133,7 @@ class _ChapterDescriptionScreenState extends State<ChapterDescriptionScreen> {
                         color: Palette.black,
                       ),
                       textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.name,
                       cursorColor: Palette.greyMedium,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
@@ -146,14 +174,48 @@ class _ChapterDescriptionScreenState extends State<ChapterDescriptionScreen> {
                       width: double.maxFinite,
                       child: ElevatedButton(
                         onPressed: () async {
-                          // TODO: Comment this out
+                          setState(() {
+                            isStoring = true;
+                          });
+
+                          final Tuple2<Document, Document> storyAndChapter =
+                              await _databaseClient.createChapter(
+                            documentID: widget.story.$id,
+                            number: widget.chapterNumber,
+                            name: _nameTextController.text,
+                            description: _descriptionTextController.text,
+                          );
+
+                          final story = storyAndChapter.item1;
+                          final chapter = storyAndChapter.item2;
+
+                          setState(() {
+                            isStoring = false;
+                          });
+
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => const ChapterViewScreen(),
+                              builder: (context) => WritingScreen(
+                                story: story,
+                                chapter: chapter,
+                                isShort: widget.isShort,
+                                user: widget.user,
+                                isInitial: widget.isInitial,
+                              ),
                             ),
                           );
                         },
-                        child: const Text('Continue'),
+                        child: isStoring
+                            ? const SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Palette.greyDark,
+                                  ),
+                                ),
+                              )
+                            : const Text('Continue'),
                       ),
                     ),
                     const SizedBox(height: 30),

@@ -6,6 +6,7 @@ import 'package:slibro/presentation/screens/splash_screen.dart';
 import 'package:slibro/secrets.dart';
 
 import 'application/res/strings.dart';
+import 'presentation/screens/dashboard_page.dart';
 
 Client client = Client();
 
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const SplashScreen(),
+      // home: const DashboardPage(),
     );
   }
 }

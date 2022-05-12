@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slibro/application/res/appwrite_const.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/main.dart';
 import 'package:slibro/presentation/screens/greet_screen.dart';
@@ -174,6 +176,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           _isAuthenticating = true;
                         });
+
+                        // TODO: Uncomment
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString(
+                          authEmailSharedPrefKey,
+                          _emailTextController.text,
+                        );
+                        await prefs.setString(
+                          authPasswordSharedPrefKey,
+                          _passwordTextController.text,
+                        );
+
                         Account account = Account(client);
                         Session userSession = await account
                             .createSession(

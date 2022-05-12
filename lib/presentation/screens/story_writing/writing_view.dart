@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:path_provider/path_provider.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/presentation/screens/dashboard_page.dart';
+import 'package:slibro/presentation/screens/story_writing/chapter_view.dart';
 import 'package:slibro/utils/database.dart';
 import 'package:slibro/utils/storage.dart';
 import 'dart:io' as io;
@@ -17,9 +19,19 @@ class WritingScreen extends StatefulWidget {
   const WritingScreen({
     Key? key,
     required this.story,
+    required this.isShort,
+    required this.chapter,
+    this.user,
+    this.isInitial = false,
+    this.jsonString,
   }) : super(key: key);
 
   final Document story;
+  final Document chapter;
+  final bool isShort;
+  final bool isInitial;
+  final User? user;
+  final String? jsonString;
 
   @override
   State<WritingScreen> createState() => _WritingScreenState();
@@ -30,9 +42,13 @@ class _WritingScreenState extends State<WritingScreen> {
   late final quill.QuillController _quillController;
   late final TextEditingController _storyNameController;
   late final FocusNode _storyNameFocusNode;
+  late final FocusNode _storyContentFocusNode;
+  late final ScrollController _scrollController;
 
   final StorageClient _storageClient = StorageClient();
   final DatabaseClient _databaseClient = DatabaseClient();
+
+  int _totalCharacters = 0;
 
   _saveDocument({required String fileName}) async {
     final json = jsonEncode(
@@ -87,24 +103,66 @@ class _WritingScreenState extends State<WritingScreen> {
       fileName: '$fileName.json',
     );
 
-    Document? updatedStory = await _databaseClient.addStoryFile(
-      documentID: widget.story.$id,
+    Document updatedChapter = await _databaseClient.addChapterFile(
+      documentID: widget.chapter.$id,
       fileID: storyFile.$id,
     );
 
     Navigator.of(context).pop();
+
+    if (widget.isInitial) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => DashboardPage(
+            user: widget.user!,
+            selectedIndex: 1,
+          ),
+        ),
+        (route) => false,
+      );
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ChapterViewScreen(
+            story: widget.story,
+          ),
+        ),
+      );
+    }
   }
 
   @override
   void initState() {
-    _quillController = quill.QuillController.basic();
-    _storyNameController = TextEditingController();
+    if (widget.jsonString != null) {
+      var jsonFile = jsonDecode(widget.jsonString!);
+      _quillController = quill.QuillController(
+        document: quill.Document.fromJson(jsonFile),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    } else {
+      _quillController = quill.QuillController.basic();
+    }
+
+    _storyNameController = TextEditingController(
+      text: widget.chapter.data['name'],
+    );
     _storyNameFocusNode = FocusNode();
+    _storyContentFocusNode = FocusNode();
+    _scrollController = ScrollController();
+
+    _quillController.addListener(() {
+      log('LENGTH: ${_quillController.document.length}');
+      setState(() {
+        _totalCharacters = _quillController.document.length;
+      });
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    log(widget.chapter.data['name']);
     return GestureDetector(
       onTap: () {
         _storyNameFocusNode.unfocus();
@@ -117,7 +175,7 @@ class _WritingScreenState extends State<WritingScreen> {
           automaticallyImplyLeading: false,
           title: Padding(
             padding: const EdgeInsets.only(left: 16.0),
-            child: const Text('CHAPTER 2'),
+            child: Text('CHAPTER ${widget.chapter.data['number']}'),
           ),
           backgroundColor: Palette.black,
           actions: [
@@ -208,7 +266,7 @@ class _WritingScreenState extends State<WritingScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 0.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 100.0),
                   child: Theme(
                     data: Theme.of(context).copyWith(
                       textSelectionTheme:
@@ -216,7 +274,13 @@ class _WritingScreenState extends State<WritingScreen> {
                         cursorColor: Colors.black,
                       ),
                     ),
-                    child: quill.QuillEditor.basic(
+                    child: quill.QuillEditor(
+                      autoFocus: false,
+                      scrollable: true,
+                      focusNode: _storyContentFocusNode,
+                      expands: false,
+                      padding: EdgeInsets.zero,
+                      scrollController: _scrollController,
                       controller: _quillController,
                       readOnly: false,
                     ),
@@ -226,23 +290,82 @@ class _WritingScreenState extends State<WritingScreen> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _storyNameFocusNode.unfocus();
-            if (_storyFormKey.currentState!.validate()) {
-              _saveDocument(
-                fileName: _storyNameController.text
-                    .toLowerCase()
-                    .replaceAll(' ', '_'),
-              );
-            }
-          },
-          child: const Icon(
-            Icons.check,
-            size: 30,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(left: 32.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
+                  width: double.maxFinite,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Palette.black,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Total characters: $_totalCharacters',
+                            style: const TextStyle(
+                              color: Palette.greyLight,
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 24),
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Palette.black,
+                child: IconButton(
+                  onPressed: () {
+                    _storyNameFocusNode.unfocus();
+                    if (_storyFormKey.currentState!.validate()) {
+                      _saveDocument(
+                        fileName: _storyNameController.text
+                            .toLowerCase()
+                            .replaceAll(' ', '_'),
+                      );
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.check,
+                    size: 30,
+                    color: Palette.white,
+                  ),
+                ),
+              ),
+            ],
           ),
-          backgroundColor: Palette.black,
         ),
+        // FloatingActionButton(
+        //   onPressed: () {
+        //     _storyNameFocusNode.unfocus();
+        //     if (_storyFormKey.currentState!.validate()) {
+        //       _saveDocument(
+        //         fileName: _storyNameController.text
+        //             .toLowerCase()
+        //             .replaceAll(' ', '_'),
+        //       );
+        //     }
+        //   },
+        //   child: const Icon(
+        //     Icons.check,
+        //     size: 30,
+        //   ),
+        //   backgroundColor: Palette.black,
+        // ),
       ),
     );
   }
