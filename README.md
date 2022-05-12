@@ -15,7 +15,14 @@ To run this from your system, you should have:
 1. [Flutter SDK](https://docs.flutter.dev/get-started/install) installed and configured on your system.
 2. Setup Appwrite using Docker.
 3. Host the server locally using [ngrok](https://ngrok.com/).
-4. Under `lib` directory, create a `secret.dart` file, and add the server URL to it.
+4. Under `lib` directory, create a `secret.dart` file, and add the server URL and Appwrite project ID to it. Example:
+
+    ```dart
+    class Secrets {
+      static String hostname = 'https://127b-203-163-244-125.in.ngrok.io/v1';
+      static String projectID = '6276341092e81e829ab0';
+    }
+    ```
 5. Run using the following command:
 
    ```sh
