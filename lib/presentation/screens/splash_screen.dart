@@ -36,7 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
     final String? userEmail = prefs.getString(authEmailSharedPrefKey);
     final String? userPassword = prefs.getString(authPasswordSharedPrefKey);
 
-    if (userEmail != null && userPassword != null) {
+    if (userEmail != null &&
+        userPassword != null &&
+        userEmail != '' &&
+        userPassword != '') {
       final Session session = await account.createSession(
         email: userEmail,
         password: userPassword,
