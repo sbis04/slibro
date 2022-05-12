@@ -28,10 +28,11 @@ class _MyStoryViewState extends State<MyStoryView> {
         publishedStories.add(stories.documents[i]);
       }
     }
-
-    setState(() {
-      _stories = publishedStories.reversed.toList();
-    });
+    if (mounted) {
+      setState(() {
+        _stories = publishedStories.reversed.toList();
+      });
+    }
   }
 
   @override
