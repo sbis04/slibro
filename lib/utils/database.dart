@@ -181,4 +181,28 @@ class DatabaseClient {
 
     return chapters;
   }
+
+  Future<Document> publishStory({required String storyId}) async {
+    final Document updatedStory = await database.updateDocument(
+      collectionId: storiesCollectionId,
+      documentId: storyId,
+      data: {'published': true},
+    );
+
+    log('Published story successfully, ID: ${updatedStory.$id}');
+
+    return updatedStory;
+  }
+
+  Future<Document> unpublishStory({required String storyId}) async {
+    final Document updatedStory = await database.updateDocument(
+      collectionId: storiesCollectionId,
+      documentId: storyId,
+      data: {'published': false},
+    );
+
+    log('Unpublished story successfully, ID: ${updatedStory.$id}');
+
+    return updatedStory;
+  }
 }
