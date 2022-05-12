@@ -8,6 +8,20 @@
 
 ![](screenshots/slibro-cross-platform-2.png)
 
+## Usage
+
+To run this from your system, you should have:
+
+1. [Flutter SDK](https://docs.flutter.dev/get-started/install) installed and configured on your system.
+2. Setup Appwrite using Docker.
+3. Host the server locally using [ngrok](https://ngrok.com/).
+4. Under `lib` directory, create a `secret.dart` file, and add the server URL to it.
+5. Run using the following command:
+
+   ```sh
+   flutter run
+   ```
+
 ## App Overview
 
 The app now has full-fledged **story editor** (rich text - markdown), **story reader**, and **story management system** (to manage published/unpublished stories and explore other publisher's stories).
