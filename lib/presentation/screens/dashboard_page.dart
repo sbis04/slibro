@@ -1,8 +1,16 @@
+import 'dart:developer';
+
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slibro/application/res/appwrite_const.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/main.dart';
+import 'package:slibro/presentation/screens/login_screen.dart';
+import 'package:slibro/presentation/screens/main_views/my_profile.dart';
 import 'package:slibro/presentation/screens/story_writing/story_length.dart';
 
 import 'main_views/home_view.dart';
@@ -51,8 +59,13 @@ class _DashboardPageState extends State<DashboardPage> {
             ? const HomeView()
             : _selectedIndex == 1
                 ? const MyStoryView()
-                : Container(),
+                : MyProfileView(
+                    user: widget.user,
+                  ),
       ),
+      floatingActionButtonLocation: _selectedIndex != 2
+          ? FloatingActionButtonLocation.endFloat
+          : FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _selectedIndex != 2
           ? FloatingActionButton(
               onPressed: () {
@@ -68,7 +81,34 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               backgroundColor: Palette.black,
             )
-          : const SizedBox(),
+          : FloatingActionButton.extended(
+              onPressed: () async {
+                Account account = Account(client);
+
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString(
+                  authEmailSharedPrefKey,
+                  '',
+                );
+                await prefs.setString(
+                  authPasswordSharedPrefKey,
+                  '',
+                );
+                // log((await account.getSessions()).toString());
+                // final SessionList sessionList = await account.getSessions();
+                // await account.deleteSession(
+                //   sessionId: sessionList.sessions.first.$id,
+                // );
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
+              label: const Text('Log out'),
+              backgroundColor: Palette.black,
+            ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Palette.white,
