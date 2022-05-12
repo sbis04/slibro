@@ -40,25 +40,35 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.transparent,
+    //     statusBarIconBrightness: Brightness.dark,
+    //   ),
+    // );
     _selectedIndex = widget.selectedIndex;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
     return Scaffold(
       backgroundColor: Palette.white,
       body: SafeArea(
         child: _selectedIndex == 0
-            ? const HomeView()
+            ? HomeView(
+                user: widget.user,
+              )
             : _selectedIndex == 1
-                ? const MyStoryView()
+                ? MyStoryView(
+                    user: widget.user,
+                  )
                 : MyProfileView(
                     user: widget.user,
                   ),
@@ -68,10 +78,16 @@ class _DashboardPageState extends State<DashboardPage> {
           : FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _selectedIndex != 2
           ? FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(
+              onPressed: () async {
+                await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => StoryLengthScreen(user: widget.user),
+                  ),
+                );
+                SystemChrome.setSystemUIOverlayStyle(
+                  const SystemUiOverlayStyle(
+                    statusBarColor: Colors.transparent,
+                    statusBarIconBrightness: Brightness.dark,
                   ),
                 );
               },

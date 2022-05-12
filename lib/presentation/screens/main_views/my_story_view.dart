@@ -2,12 +2,15 @@ import 'dart:developer';
 
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/presentation/screens/story_writing/chapter_view.dart';
 import 'package:slibro/utils/database.dart';
 
 class MyStoryView extends StatefulWidget {
-  const MyStoryView({Key? key}) : super(key: key);
+  const MyStoryView({Key? key, required this.user}) : super(key: key);
+
+  final User user;
 
   @override
   State<MyStoryView> createState() => _MyStoryViewState();
@@ -24,7 +27,7 @@ class _MyStoryViewState extends State<MyStoryView> {
     for (int i = 0; i < stories.documents.length; i++) {
       final storyData = stories.documents[i].data;
 
-      if (storyData['published'] == false) {
+      if (storyData['uid'] == widget.user.$id) {
         publishedStories.add(stories.documents[i]);
       }
     }
@@ -43,6 +46,12 @@ class _MyStoryViewState extends State<MyStoryView> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Column(
@@ -96,7 +105,9 @@ class _MyStoryViewState extends State<MyStoryView> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => ChapterViewScreen(
-                                        story: retrievedStories[index]),
+                                      story: retrievedStories[index],
+                                      user: widget.user,
+                                    ),
                                   ),
                                 );
                               },

@@ -177,7 +177,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           _isAuthenticating = true;
                         });
 
-                        // TODO: Uncomment
+                        Account account = Account(client);
+                        try {
+                          Session userSession = await account
+                              .createSession(
+                                  email: _emailTextController.text,
+                                  password: _passwordTextController.text)
+                              .catchError((error) {
+                            throw (error.response);
+                          });
+                          log('User logged in successfully: ${userSession.userId}');
+                        } catch (e) {}
+
                         final prefs = await SharedPreferences.getInstance();
                         await prefs.setString(
                           authEmailSharedPrefKey,
@@ -188,17 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _passwordTextController.text,
                         );
 
-                        Account account = Account(client);
-                        Session userSession = await account
-                            .createSession(
-                                email: _emailTextController.text,
-                                password: _passwordTextController.text)
-                            .catchError((error) {
-                          log(error.response);
-                        });
                         User loggedInUser = await account.get();
-
-                        log('User logged in successfully: ${userSession.userId}');
 
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(

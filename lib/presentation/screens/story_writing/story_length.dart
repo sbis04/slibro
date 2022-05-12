@@ -1,5 +1,6 @@
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:slibro/application/res/palette.dart';
 import 'package:slibro/presentation/screens/story_writing/story_name.dart';
 
@@ -15,6 +16,12 @@ class StoryLengthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
     return Scaffold(
       backgroundColor: Palette.white,
       body: SafeArea(

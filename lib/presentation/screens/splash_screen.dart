@@ -95,6 +95,23 @@ class _SplashScreenState extends State<SplashScreen> {
                     'Slibro',
                     style: Theme.of(context).textTheme.headline1,
                   ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Powered by ',
+                        style: TextStyle(
+                          color: Palette.greyDark,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                      Image.asset(
+                        'assets/appwrite-logo.png',
+                        width: 100,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

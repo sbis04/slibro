@@ -21,7 +21,7 @@ class WritingScreen extends StatefulWidget {
     required this.story,
     required this.isShort,
     required this.chapter,
-    this.user,
+    required this.user,
     this.isInitial = false,
     this.jsonString,
   }) : super(key: key);
@@ -30,7 +30,7 @@ class WritingScreen extends StatefulWidget {
   final Document chapter;
   final bool isShort;
   final bool isInitial;
-  final User? user;
+  final User user;
   final String? jsonString;
 
   @override
@@ -114,7 +114,7 @@ class _WritingScreenState extends State<WritingScreen> {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => DashboardPage(
-            user: widget.user!,
+            user: widget.user,
             selectedIndex: 1,
           ),
         ),
@@ -125,6 +125,7 @@ class _WritingScreenState extends State<WritingScreen> {
         MaterialPageRoute(
           builder: (context) => ChapterViewScreen(
             story: widget.story,
+            user: widget.user,
           ),
         ),
       );
@@ -175,7 +176,9 @@ class _WritingScreenState extends State<WritingScreen> {
           automaticallyImplyLeading: false,
           title: Padding(
             padding: const EdgeInsets.only(left: 16.0),
-            child: Text('CHAPTER ${widget.chapter.data['number']}'),
+            child: Text(widget.isShort
+                ? widget.story.data['title']
+                : 'CHAPTER ${widget.chapter.data['number']}'),
           ),
           backgroundColor: Palette.black,
           actions: [
@@ -187,52 +190,53 @@ class _WritingScreenState extends State<WritingScreen> {
             )
           ],
           bottom: PreferredSize(
-            preferredSize: const Size(double.maxFinite, 120),
+            preferredSize: Size(double.maxFinite, widget.isShort ? 80 : 120),
             child: Form(
               key: _storyFormKey,
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 22.0,
-                      left: 16.0,
-                      right: 16.0,
-                    ),
-                    child: TextFormField(
-                      controller: _storyNameController,
-                      focusNode: _storyNameFocusNode,
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.done,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Palette.greyLight,
+                      padding: const EdgeInsets.only(
+                        bottom: 22.0,
+                        left: 16.0,
+                        right: 16.0,
                       ),
-                      cursorColor: Palette.greyMedium,
-                      decoration: InputDecoration(
-                        border: const UnderlineInputBorder(),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Palette.greyLight.withOpacity(0.6),
-                            width: 3,
-                          ),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Palette.greyLight.withOpacity(0.5),
-                            width: 2,
-                          ),
-                        ),
-                        hintText: 'Enter the chapter name',
-                        hintStyle: TextStyle(
-                          fontSize: 16,
-                          color: Palette.white.withOpacity(0.4),
-                        ),
-                      ),
-                      validator: (value) => Validators.validateName(
-                        name: value,
-                      ),
-                    ),
-                  ),
+                      child: widget.isShort
+                          ? const SizedBox()
+                          : TextFormField(
+                              controller: _storyNameController,
+                              focusNode: _storyNameFocusNode,
+                              keyboardType: TextInputType.name,
+                              textInputAction: TextInputAction.done,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Palette.greyLight,
+                              ),
+                              cursorColor: Palette.greyMedium,
+                              decoration: InputDecoration(
+                                border: const UnderlineInputBorder(),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Palette.greyLight.withOpacity(0.6),
+                                    width: 3,
+                                  ),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Palette.greyLight.withOpacity(0.5),
+                                    width: 2,
+                                  ),
+                                ),
+                                hintText: 'Enter the chapter name',
+                                hintStyle: TextStyle(
+                                  fontSize: 16,
+                                  color: Palette.white.withOpacity(0.4),
+                                ),
+                              ),
+                              validator: (value) => Validators.validateName(
+                                name: value,
+                              ),
+                            )),
                   quill.QuillToolbar.basic(
                     toolbarIconSize: 26,
                     iconTheme: const quill.QuillIconTheme(

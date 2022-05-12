@@ -3,10 +3,13 @@ import 'dart:developer';
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:slibro/application/res/palette.dart';
+import 'package:slibro/presentation/screens/story_writing/chapter_view.dart';
 import 'package:slibro/utils/database.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({Key? key, required this.user}) : super(key: key);
+
+  final User user;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -89,7 +92,16 @@ class _HomeViewState extends State<HomeView> {
                             final String author = storyData['author'];
 
                             return InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ChapterViewScreen(
+                                      story: retrievedStories[index],
+                                      user: widget.user,
+                                    ),
+                                  ),
+                                );
+                              },
                               child: ListTile(
                                 title: Padding(
                                   padding: const EdgeInsets.only(bottom: 4.0),

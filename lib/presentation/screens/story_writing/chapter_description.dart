@@ -96,6 +96,7 @@ class _ChapterDescriptionScreenState extends State<ChapterDescriptionScreen> {
                         color: Palette.black,
                       ),
                       textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.words,
                       keyboardType: TextInputType.name,
                       cursorColor: Palette.greyMedium,
                       decoration: InputDecoration(
@@ -133,6 +134,7 @@ class _ChapterDescriptionScreenState extends State<ChapterDescriptionScreen> {
                         color: Palette.black,
                       ),
                       textInputAction: TextInputAction.done,
+                      textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.name,
                       cursorColor: Palette.greyMedium,
                       decoration: InputDecoration(
